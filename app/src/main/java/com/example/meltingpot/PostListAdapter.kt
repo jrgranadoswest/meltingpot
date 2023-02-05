@@ -47,6 +47,7 @@ class PostListAdapter(private val options: FirebaseRecyclerOptions<StandardPost>
                         .setValue(item.votes + 1)
                 }
             }
+            binding.usernamedisp.text = item.usern
             binding.downpost.setOnClickListener {
                 binding.downpost.isEnabled = false
                 binding.uppost.isEnabled = false

@@ -24,6 +24,15 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:text="Place holder text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
             />
+        <TextView
+            android:id="@+id/usernamedisp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/post_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="Tommy Mecherikunnel"
+            />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/post_buttons"
@@ -31,7 +40,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            app:layout_constraintTop_toBottomOf="@id/post_content"
+            app:layout_constraintTop_toBottomOf="@id/usernamedisp"
             app:layout_constraintBottom_toTopOf="@id/translated_tv"
             >
             <Button
