@@ -2,7 +2,6 @@ package com.example.meltingpot
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -96,6 +95,11 @@ class CreateFragment : Fragment() {
         binding.frTextIn.doOnTextChanged { textval: CharSequence?, /*start*/ _: Int, /*before*/ _: Int, /*count*/ _: Int ->
             binding.postFab.isEnabled = textval.toString().trim().isNotEmpty()
         }
+        binding.createCancelBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_createFragment_to_primaryFeed, Bundle().apply {
+                putString("LANG", lang_setting)
+            })
+        }
 
         // When the send button is clicked, send a text message
         binding.postFab.setOnClickListener {
@@ -111,37 +115,39 @@ class CreateFragment : Fragment() {
                 longi = it.longitude
             }
 
-            //translation
+            // Translation
             val options: TranslatorOptions
-            if(lang_setting.equals("French", true)){
-                options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.FRENCH)
-                    .setTargetLanguage(TranslateLanguage.ENGLISH)
-                    .build()
+            when(lang_setting) {
+                "French" -> {
+                    options = TranslatorOptions.Builder()
+                        .setSourceLanguage(TranslateLanguage.FRENCH)
+                        .setTargetLanguage(TranslateLanguage.ENGLISH)
+                        .build()
+                }
+                "Spanish" -> {
+                    options = TranslatorOptions.Builder()
+                        .setSourceLanguage(TranslateLanguage.SPANISH)
+                        .setTargetLanguage(TranslateLanguage.ENGLISH)
+                        .build()
+                }
+                "Japanese" -> {
+                    options = TranslatorOptions.Builder()
+                        .setSourceLanguage(TranslateLanguage.JAPANESE)
+                        .setTargetLanguage(TranslateLanguage.ENGLISH)
+                        .build()
+                } else -> {
+                    options = TranslatorOptions.Builder()
+                        .setSourceLanguage(TranslateLanguage.ENGLISH)
+                        .setTargetLanguage(TranslateLanguage.ENGLISH)
+                        .build()
+                }
             }
-            else if(lang_setting.equals("Spanish", true)){
-                options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.SPANISH)
-                    .setTargetLanguage(TranslateLanguage.ENGLISH)
-                    .build()
-            }
-            else if(lang_setting.equals("Japanese", true)){
-                options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.JAPANESE)
-                    .setTargetLanguage(TranslateLanguage.ENGLISH)
-                    .build()
-            }
-            else{
-                options = TranslatorOptions.Builder()
-                    .setSourceLanguage(TranslateLanguage.ENGLISH)
-                    .setTargetLanguage(TranslateLanguage.ENGLISH)
-                    .build()
-            }
+
             val translator = Translation.getClient(options)
             lifecycle.addObserver(translator)
 
             var translated = ""
-            var conditions = DownloadConditions.Builder()
+            val conditions = DownloadConditions.Builder()
                 .requireWifi()
                 .build()
             translator.downloadModelIfNeeded(conditions)
@@ -151,24 +157,35 @@ class CreateFragment : Fragment() {
                 }
                 .addOnFailureListener { exception ->
                     // Model couldn’t be downloaded or other internal error.
-                    // ...
+                    translated = "failed to translate :("
+                    val newPost: StandardPost = StandardPost(timedateval, "${lati},${longi}", lang_setting, binding.frTextIn.text.toString(), username, 0, translated)
+                    db.reference.child("gen_posts").child(lang_setting).push().setValue(newPost)
+                    findNavController().navigate(R.id.action_createFragment_to_primaryFeed, Bundle().apply {
+                        putString("LANG", lang_setting)
+                    })
                 }
-            var translateString = binding.frTextIn.text.toString()
+            val translateString = binding.frTextIn.text.toString()
             translator.translate(translateString.toString())
                 .addOnSuccessListener { translatedText ->
                     // Translation successful.
                     translated = translatedText
+                    val newPost: StandardPost = StandardPost(timedateval, "${lati},${longi}", lang_setting, binding.frTextIn.text.toString(), username, 0, translated)
+                    db.reference.child("gen_posts").child(lang_setting).push().setValue(newPost)
+                    findNavController().navigate(R.id.action_createFragment_to_primaryFeed, Bundle().apply {
+                        putString("LANG", lang_setting)
+                    })
                 }
                 .addOnFailureListener { exception ->
-                    // Error.
-                    // ...
+                    // Error...
                     translated = "error when translating :("
+                    val newPost: StandardPost = StandardPost(timedateval, "${lati},${longi}", lang_setting, binding.frTextIn.text.toString(), username, 0, translated)
+                    db.reference.child("gen_posts").child(lang_setting).push().setValue(newPost)
+                    findNavController().navigate(R.id.action_createFragment_to_primaryFeed, Bundle().apply {
+                        putString("LANG", lang_setting)
+                    })
                 }
 
-            val newPost: StandardPost = StandardPost(timedateval, "${lati},${longi}", lang_setting, binding.frTextIn.text.toString(), username, 0, translated)
-            Log.d(TAG, "Adding post")
-            db.reference.child("gen_posts").child(lang_setting).push().setValue(newPost)
-            findNavController().navigate(R.id.action_createFragment_to_primaryFeed)
+
         }
         return binding.root
     }

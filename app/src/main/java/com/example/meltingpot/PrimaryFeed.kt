@@ -56,6 +56,7 @@ class PrimaryFeed : Fragment() {
         auth = Firebase.auth
 
         binding.fab.setOnClickListener {
+            Log.d(TAG, "Clicked fab to create new post")
             findNavController().navigate(R.id.action_primaryFeed_to_createFragment, Bundle().apply {
                 putString("LANG", lang_setting)
             })
@@ -67,7 +68,7 @@ class PrimaryFeed : Fragment() {
         // The FirebaseRecyclerAdapter class and options come from the FirebaseUI library
         // See: https://github.com/firebase/FirebaseUI-Android
         val options = FirebaseRecyclerOptions.Builder<StandardPost>()
-            .setQuery(messagesRef, StandardPost::class.java)
+            .setQuery(messagesRef.orderByChild("time"), StandardPost::class.java)
             .build()
         adapter = PostListAdapter(options, getUserName())
         manager = LinearLayoutManager(context)
@@ -81,8 +82,8 @@ class PrimaryFeed : Fragment() {
                 // Get Post object and use the values to update the UI
                 val post = dataSnapshot.getValue<HashMap<String, StandardPost>>()
                 val values: MutableCollection<StandardPost>? = post?.values
-                Log.d("ABACABA", "A: " + dataSnapshot.toString())
-                Log.d("ABACABA", "A: " + values.toString())
+                Log.d(TAG, "ds: " + dataSnapshot.toString())
+                Log.d(TAG, "vals: " + values.toString())
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Post failed, log a message

@@ -26,21 +26,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Language: Spanish"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:layout_margin="5dp"
             />
         <TextView
             android:id="@+id/post_prompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:text="Type post here: "
             android:layout_margin="5dp"
             />
         <com.google.android.material.textfield.TextInputEditText
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
             android:id="@+id/fr_text_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="200dp"
+            android:background="@color/lightviolet"
+            android:padding="5dp"
+            android:textSize="20sp"
             android:layout_marginHorizontal="5dp"
+            android:textCursorDrawable="@color/black"
             />
 
     </LinearLayout>

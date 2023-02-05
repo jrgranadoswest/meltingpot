@@ -13,6 +13,9 @@ import com.example.meltingpot.databinding.PostcardBinding
 import com.example.meltingpot.model.StandardPost
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class PostListAdapter(private val options: FirebaseRecyclerOptions<StandardPost>,
                       private val currentUserName: String?
@@ -33,14 +36,41 @@ class PostListAdapter(private val options: FirebaseRecyclerOptions<StandardPost>
         fun toggleTr() {
             show_translated = !show_translated
         }
-        fun bind(item: StandardPost) {
+        fun bind(item: StandardPost, pos: Int) {
+            binding.uppost.setOnClickListener {
+                binding.downpost.isEnabled = false
+                binding.uppost.isEnabled = false
+                val keyId: String? = getRef(pos).key
+                val db: FirebaseDatabase = Firebase.database
+                if (keyId != null) {
+                    db.reference.child("gen_posts").child(item.lang).child(keyId).child("votes")
+                        .setValue(item.votes + 1)
+                }
+            }
+            binding.downpost.setOnClickListener {
+                binding.downpost.isEnabled = false
+                binding.uppost.isEnabled = false
+                val keyId: String? = getRef(pos).key
+                val db: FirebaseDatabase = Firebase.database
+                if (keyId != null) {
+                    db.reference.child("gen_posts").child(item.lang).child(keyId).child("votes")
+                        .setValue(item.votes - 1)
+                }
+
+            }
+            binding.votesTv.text = item.votes.toString()
             binding.postContent.text = item.content
+            binding.translatedTv.text = item.translated
             binding.translateBtn.setOnClickListener {
                 toggleTr()
                 if(showingTr()) {
+                    binding.translateBtn.text = "HIDE"
                     binding.translatedTv.visibility = View.VISIBLE
+                    binding.divideLine.visibility = View.VISIBLE
                 } else {
+                    binding.translateBtn.text = "TRANSLATE"
                     binding.translatedTv.visibility = View.GONE
+                    binding.divideLine.visibility = View.GONE
                 }
             }
         }
@@ -51,7 +81,7 @@ class PostListAdapter(private val options: FirebaseRecyclerOptions<StandardPost>
         position: Int,
         model: StandardPost
     ) {
-        (holder as PostViewHolder).bind(model)
+        (holder as PostViewHolder).bind(model, position)
     }
 
 }

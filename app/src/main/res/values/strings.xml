@@ -16,7 +16,6 @@
 
     <string-array name="available_languages">
         <item>Spanish</item>
-        <item>English</item>
         <item>Japanese</item>
         <item>French</item>
     </string-array>
