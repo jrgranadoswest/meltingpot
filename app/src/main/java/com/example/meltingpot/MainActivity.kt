@@ -3,11 +3,12 @@ package com.example.meltingpot
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.example.meltingpot.databinding.ActivityMainBinding
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
@@ -27,5 +28,24 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.logout_menu) {
+            logout()
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
+    }
+    private fun logout() {
+        AuthUI.getInstance().signOut(this)
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }

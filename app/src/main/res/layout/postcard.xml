@@ -21,7 +21,6 @@
             android:text="Place holder text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
             />
 
-
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/post_buttons"
             android:layout_width="match_parent"

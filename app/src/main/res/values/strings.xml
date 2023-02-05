@@ -12,4 +12,12 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="sign_out">Sign out</string>
+
+    <string-array name="available_languages">
+        <item>Spanish</item>
+        <item>English</item>
+        <item>Japanese</item>
+        <item>French</item>
+    </string-array>
 </resources>
