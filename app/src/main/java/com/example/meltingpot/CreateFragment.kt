@@ -22,6 +22,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.nl.translate.TranslateLanguage
+import com.google.mlkit.nl.translate.Translation
+import com.google.mlkit.nl.translate.TranslatorOptions
 import java.time.LocalDateTime
 import java.util.*
 
@@ -106,7 +110,62 @@ class CreateFragment : Fragment() {
             latlong?.let{ lati = it.latitude
                 longi = it.longitude
             }
-            val newPost: StandardPost = StandardPost(timedateval, "${lati},${longi}", lang_setting, binding.frTextIn.text.toString(), username, 0)
+
+            //translation
+            val options: TranslatorOptions
+            if(lang_setting.equals("French", true)){
+                options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.FRENCH)
+                    .setTargetLanguage(TranslateLanguage.ENGLISH)
+                    .build()
+            }
+            else if(lang_setting.equals("Spanish", true)){
+                options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.SPANISH)
+                    .setTargetLanguage(TranslateLanguage.ENGLISH)
+                    .build()
+            }
+            else if(lang_setting.equals("Japanese", true)){
+                options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.JAPANESE)
+                    .setTargetLanguage(TranslateLanguage.ENGLISH)
+                    .build()
+            }
+            else{
+                options = TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.ENGLISH)
+                    .build()
+            }
+            val translator = Translation.getClient(options)
+            lifecycle.addObserver(translator)
+
+            var translated = ""
+            var conditions = DownloadConditions.Builder()
+                .requireWifi()
+                .build()
+            translator.downloadModelIfNeeded(conditions)
+                .addOnSuccessListener {
+                    // Model downloaded successfully. Okay to start translating.
+                    // (Set a flag, unhide the translation UI, etc.)
+                }
+                .addOnFailureListener { exception ->
+                    // Model couldn’t be downloaded or other internal error.
+                    // ...
+                }
+            var translateString = binding.frTextIn.text.toString()
+            translator.translate(translateString.toString())
+                .addOnSuccessListener { translatedText ->
+                    // Translation successful.
+                    translated = translatedText
+                }
+                .addOnFailureListener { exception ->
+                    // Error.
+                    // ...
+                    translated = "error when translating :("
+                }
+
+            val newPost: StandardPost = StandardPost(timedateval, "${lati},${longi}", lang_setting, binding.frTextIn.text.toString(), username, 0, translated)
             Log.d(TAG, "Adding post")
             db.reference.child("gen_posts").child(lang_setting).push().setValue(newPost)
             findNavController().navigate(R.id.action_createFragment_to_primaryFeed)
