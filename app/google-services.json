@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "949647126772",
+    "project_id": "meltingpot-9455a",
+    "storage_bucket": "meltingpot-9455a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949647126772:android:18514b9d6fb3d8d282aea1",
+        "android_client_info": {
+          "package_name": "com.example.meltingpot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "949647126772-nhok6nu1dmm18v4p7hknrvm7l457t0pe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.meltingpot",
+            "certificate_hash": "ca063bcbf26e6acc0a7ce9ac7e0ce48ff0c8d990"
+          }
+        },
+        {
+          "client_id": "949647126772-839pb87ivn7clun834bf66n17acqd7j3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAFh0kFxPphH8JF-JVbSUUktx_t_rzUbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949647126772-839pb87ivn7clun834bf66n17acqd7j3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

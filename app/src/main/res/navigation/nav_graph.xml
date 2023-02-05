@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/langSelectFragment">
+
+    <fragment
+        android:id="@+id/primaryFeed"
+        android:name="com.example.meltingpot.PrimaryFeed"
+        android:label="fragment_primary_feed"
+        tools:layout="@layout/fragment_primary_feed" >
+        <action
+            android:id="@+id/action_primaryFeed_to_createFragment"
+            app:destination="@id/createFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/langSelectFragment"
+        android:name="com.example.meltingpot.LangSelectFragment"
+        android:label="fragment_lang_select"
+        tools:layout="@layout/fragment_lang_select" >
+        <action
+            android:id="@+id/action_langSelectFragment_to_primaryFeed"
+            app:destination="@id/primaryFeed" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="com.example.meltingpot.CreateFragment"
+        android:label="fragment_create"
+        tools:layout="@layout/fragment_create" >
+        <action
+            android:id="@+id/action_createFragment_to_primaryFeed"
+            app:destination="@id/primaryFeed" />
+    </fragment>
+</navigation>
